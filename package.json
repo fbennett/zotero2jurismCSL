@@ -7,7 +7,7 @@
     "type" : "git",
     "url" : "https://github.com/fbennett/zotero2jurismCSL.git"
   },
-  "author": "Frank Bennett <biercenator@gmail.com> (https://juris-m.github.io)"
+  "author": "Frank Bennett <biercenator@gmail.com> (https://juris-m.github.io)",
   "license": "CPAL-1.0 OR AGPL-1.0",
   "dependencies": {},
   "devDependencies": {}
