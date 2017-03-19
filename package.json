@@ -1,0 +1,14 @@
+{
+  "name": "zotero2jurismCSL",
+  "version": "0.0.1",
+  "description": "A simple package to convert Zotero items acquired via the libzotero package to Juris-M format, unpacking extended fields.",
+  "main": "zotero2jurismCSL",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/fbennett/zotero2jurismCSL.git"
+  },
+  "author": "Frank Bennett <biercenator@gmail.com> (https://juris-m.github.io)"
+  "license": "CPAL-1.0 OR AGPL-1.0",
+  "dependencies": {},
+  "devDependencies": {}
+}
