@@ -1,10 +1,11 @@
 var jurism2cslMap = require('./jurism2cslMap')
-var zoteroBaseMap = require('./zoteroBaseMap');
 
+// Encoding of names set single-field names as "name" in encoded data
+// at some point. This recovers from that glitch.
 function convertName(obj, fieldMode) {
     var ret = {};
-    if (obj.fieldMode || fieldMode) {
-        ret.literal = obj.lastName;
+    if (obj.fieldMode || obj.name || fieldMode) {
+        ret.literal = obj.lastName ? obj.lastName : obj.name;
     } else {
         ret.given = obj.firstName;
         ret.family = obj.lastName;
@@ -16,13 +17,7 @@ function convertName(obj, fieldMode) {
 function convert(obj) {
     var extradata = null;
     var zObj = obj.pristineData;
-    for (var key in zObj) {
-        if (zoteroBaseMap[zObj.itemType] && zoteroBaseMap[zObj.itemType][key]) {
-            zObj[zoteroBaseMap[zObj.itemType][key]] = zObj[key];
-            delete zObj[key];
-        }
-    }
-    var cObj = obj.cslItem(zObj);
+    var cObj = obj.cslItem();
     cObj.multi = {
         main: {},
         _keys: {}
@@ -40,7 +35,7 @@ function convert(obj) {
             for (var j=0,jlen=extradata.extracreators.length;j<jlen;j++) {
                 var zCreator = extradata.extracreators[j];
                 zObj.creators.push(zCreator);
-                var cslVarname = jurism2cslMap[cObj.type][zCreator.creatorType];
+                var cslVarname = jurism2cslMap.fields[cObj.type][zCreator.creatorType];
                 cCreator = convertName(zCreator, zCreator.fieldMode);
                 if (!cObj[cslVarname]) {
                     cObj[cslVarname] = [];
@@ -56,7 +51,7 @@ function convert(obj) {
             if (zObj.creators[j].creatorType === 'author') {
                 var cslVarname = 'author';
             } else {
-                var cslVarname = jurism2cslMap[cObj.type][zObj.creators[j].creatorType];
+                var cslVarname = jurism2cslMap.fields[cObj.type][zObj.creators[j].creatorType];
             }
             if (!creatorCounts[cslVarname]) {
                 creatorCounts[cslVarname] = 0;
@@ -81,11 +76,11 @@ function convert(obj) {
         }
         if (extradata.multifields) {
             for (zFieldName in extradata.multifields.main) {
-                cFieldName = jurism2cslMap[cObj.type][zFieldName];
+                cFieldName = jurism2cslMap.fields[cObj.type][zFieldName];
                 cObj.multi.main[cFieldName] = extradata.multifields.main[zFieldName];
             }
             for (zFieldName in extradata.multifields._keys) {
-                cFieldName = jurism2cslMap[cObj.type][zFieldName];
+                cFieldName = jurism2cslMap.fields[cObj.type][zFieldName];
                 cObj.multi._keys[cFieldName] = extradata.multifields._keys[zFieldName];
             }
         }
