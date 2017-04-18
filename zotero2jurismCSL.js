@@ -70,7 +70,7 @@ function convert(obj) {
         }
         if (extradata.extrafields) {
             for (var key in extradata.extrafields) {
-                cObj[jurism2cslMap[cObj.type][key]] = extradata.extrafields[key];
+                cObj[jurism2cslMap.fields[cObj.type][key]] = extradata.extrafields[key];
                 delete extradata.extrafields[key];
             }
         }
