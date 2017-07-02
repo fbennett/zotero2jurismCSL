@@ -172,6 +172,7 @@ module.exports = {
             "shortTitle": "title-short", 
             "system": "medium", 
             "title": "title", 
+            "translator": "translator", 
             "url": "URL"
         }, 
         "broadcast": {
