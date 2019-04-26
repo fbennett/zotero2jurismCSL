@@ -14,10 +14,13 @@ function convertName(obj, fieldMode) {
 }
 
 
-function convert(obj) {
+function convert(obj, cslData) {
     var extradata = null;
     var zObj = obj.pristineData;
-    var cObj = obj.cslItem();
+    var cObj = cslData;
+    if (!cslData) {
+        cObj = obj.cslItem();
+    }
     cObj.multi = {
         main: {},
         _keys: {}
