@@ -1,4 +1,17 @@
-var jurism2cslMap = require('./jurism2cslMap')
+const jurism2cslMap = require('./jurism2cslMap')
+
+const CSL_DATE_VARIABLES = [
+    "accessed",
+    "container",
+    "event-date",
+    "issued",
+    "original-date",
+    "submitted",
+    "available-date",
+    "locator-date",
+    "publication-date",
+    "alt-issued"
+];
 
 // Encoding of names set single-field names as "name" in encoded data
 // at some point. This recovers from that glitch.
@@ -16,7 +29,7 @@ function convertName(obj, fieldMode) {
 
 function convert(obj, cslData) {
     var extradata = null;
-    var zObj = obj.pristineData;
+    var zObj = obj.data;
     var cObj = cslData;
     if (!cslData) {
         cObj = obj.cslItem();
@@ -97,6 +110,19 @@ function convert(obj, cslData) {
                 cObj[creatorMap[pos].cslVarname][creatorMap[pos].cslPos].multi = creatorData;
                 
                 delete extradata.multicreators[pos]
+            }
+        }
+    }
+    if (cObj.jurisdiction) {
+        var m = cObj.jurisdiction.match(/^([0-9][0-9][0-9])([^0-9]+)$/);
+        if (m) {
+            cObj.jurisdiction = m[2].slice(0, parseInt(m[1]));
+        }
+    }
+    for (var v of CSL_DATE_VARIABLES) {
+        if ("string" === typeof cObj[v]) {
+            cObj[v] = {
+                raw: cObj[v]
             }
         }
     }
