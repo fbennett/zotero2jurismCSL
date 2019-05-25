@@ -1,17 +1,5 @@
-const jurism2cslMap = require('./jurism2cslMap')
-
-const CSL_DATE_VARIABLES = [
-    "accessed",
-    "container",
-    "event-date",
-    "issued",
-    "original-date",
-    "submitted",
-    "available-date",
-    "locator-date",
-    "publication-date",
-    "alt-issued"
-];
+var jurism2cslMap = require('./jurism2cslMap')
+var DateParser = require("citeproc").DateParser;
 
 // Encoding of names set single-field names as "name" in encoded data
 // at some point. This recovers from that glitch.
@@ -66,8 +54,10 @@ function convert(obj, cslData) {
         for (var j=0,jlen=zObj.creators.length;j<jlen;j++) {
             if (zObj.creators[j].creatorType === 'author') {
                 var cslVarname = 'author';
-            } else {
+            } else if (jurism2cslMap.fields[cObj.type][zObj.creators[j].creatorType]) {
                 var cslVarname = jurism2cslMap.fields[cObj.type][zObj.creators[j].creatorType];
+            } else {
+                var cslVarname = zObj.creators[j].creatorType;
             }
             if (!creatorCounts[cslVarname]) {
                 creatorCounts[cslVarname] = 0;
@@ -112,17 +102,17 @@ function convert(obj, cslData) {
                 delete extradata.multicreators[pos]
             }
         }
-    }
-    if (cObj.jurisdiction) {
-        var m = cObj.jurisdiction.match(/^([0-9][0-9][0-9])([^0-9]+)$/);
-        if (m) {
-            cObj.jurisdiction = m[2].slice(0, parseInt(m[1]));
+        for (var key in cObj) {
+            if (cObj[key].raw) {
+                cObj[key] = DateParser.parseDateToArray(cObj[key].raw);
+            }
         }
-    }
-    for (var v of CSL_DATE_VARIABLES) {
-        if ("string" === typeof cObj[v]) {
-            cObj[v] = {
-                raw: cObj[v]
+        if (cObj.jurisdiction) {
+            var m = cObj.jurisdiction.match(/^([0-9][0-9][0-9])/);
+            if (m) {
+                var offset = parseInt(m[1]);
+                cObj.jurisdiction = cObj.jurisdiction.slice(3, offset + 3);
+
             }
         }
     }
