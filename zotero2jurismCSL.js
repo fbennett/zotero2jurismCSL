@@ -1,6 +1,19 @@
 var jurism2cslMap = require('./jurism2cslMap')
 var DateParser = require("citeproc").DateParser;
 
+const CSL_DATE_VARIABLES = [
+    "accessed",
+    "container",
+    "event-date",
+    "issued",
+    "original-date",
+    "submitted",
+    "available-date",
+    "locator-date",
+    "publication-date",
+    "alt-issued"
+];
+
 // Encoding of names set single-field names as "name" in encoded data
 // at some point. This recovers from that glitch.
 function convertName(obj, fieldMode) {
@@ -102,9 +115,9 @@ function convert(obj, cslData) {
                 delete extradata.multicreators[pos]
             }
         }
-        for (var key in cObj) {
-            if (cObj[key].raw) {
-                cObj[key] = DateParser.parseDateToArray(cObj[key].raw);
+        for (var fieldName of CSL_DATE_VARIABLES) {
+            if ("string" === typeof cObj[fieldName]) {
+                cObj[fieldName] = DateParser.parseDateToArray(cObj[fieldName]);
             }
         }
         if (cObj.jurisdiction) {
