@@ -129,6 +129,15 @@ function convert(obj, cslData) {
             }
         }
     }
+    for (var key of CSL_DATE_VARIABLES) {
+        if ("string" === typeof cObj[key]) {
+            var m = cObj[key].match(/^([0-9]{4}[-.,][0-9]{1,2}[-.,][0-9]{1,2}).*/);
+            if (m) {
+                cObj[key] = m[1];
+            }
+            cObj[key] = { raw: cObj[key] };
+        }
+    }
     return cObj;
 }
 
