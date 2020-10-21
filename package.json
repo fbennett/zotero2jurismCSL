@@ -1,6 +1,6 @@
 {
   "name": "zotero2jurismcsl",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A simple package to convert Zotero items acquired via the libzotero package or the Zotero API to Juris-M format, unpacking extended fields.",
   "main": "zotero2jurismCSL",
   "repository": {
