@@ -414,6 +414,7 @@ module.exports = {
             "contributor": "contributor", 
             "court": "authority", 
             "dateDecided": "issued", 
+            "division": "division", 
             "docketNumber": "number", 
             "documentName": "document-name", 
             "extra": "note", 
